@@ -33,7 +33,8 @@ public class Judge {
             return new Builder();
         }
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder setName(String name) {
             this.name = name;

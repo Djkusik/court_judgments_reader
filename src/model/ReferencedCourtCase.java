@@ -33,7 +33,8 @@ public class ReferencedCourtCase {
             return new Builder();
         }
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder setCaseNumber(String caseNumber) {
             this.caseNumber = caseNumber;

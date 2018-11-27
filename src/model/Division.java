@@ -9,7 +9,8 @@ public class Division {
     @Expose
     private int id;
 
-    public Division() {}
+    public Division() {
+    }
 
     public Division(int id) {
         super();

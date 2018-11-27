@@ -46,7 +46,8 @@ public class Source {
             return new Builder();
         }
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder setCode(String code) {
             this.code = code;

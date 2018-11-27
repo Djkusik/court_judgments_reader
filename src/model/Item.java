@@ -113,7 +113,8 @@ public class Item {
             return new Builder();
         }
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder setId(String id) {
             this.id = id;

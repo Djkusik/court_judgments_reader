@@ -9,7 +9,8 @@ public class CourtCase {
     @Expose
     private String caseNumber;
 
-    public CourtCase() {}
+    public CourtCase() {
+    }
 
     public CourtCase(String caseNumber) {
         super();

@@ -41,7 +41,8 @@ public class ReferencedRegulation {
             return new Builder();
         }
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder setJournalTitle(String journalTitle) {
             this.journalTitle = journalTitle;
