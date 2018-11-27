@@ -11,23 +11,13 @@ import java.io.IOException;
 public class Parser {
 
     public Judgment parse(String path) {
-        BufferedReader json = null;
         Gson parseToObject = new Gson();
 
-        try {
-            json = new BufferedReader(new FileReader(path));
+        try (BufferedReader json = new BufferedReader(new FileReader(path))){
             Judgment judgment = parseToObject.fromJson(json, Judgment.class);
             return judgment;
-        } catch (FileNotFoundException err) {
+        } catch (IOException err) {
             err.printStackTrace();
-        } finally {
-            if (json != null) {
-                try {
-                    json.close();
-                } catch (IOException err) {
-                    err.printStackTrace();
-                }
-            }
         }
         return null;
     }
