@@ -3,6 +3,8 @@ package model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 public class ReferencedRegulation {
 
     @SerializedName("journalTitle")
@@ -92,5 +94,18 @@ public class ReferencedRegulation {
 
     public String getText() {
         return text;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReferencedRegulation that = (ReferencedRegulation) o;
+        return Objects.equals(journalTitle, that.journalTitle);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(journalTitle, journalYear);
     }
 }

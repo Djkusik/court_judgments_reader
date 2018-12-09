@@ -12,6 +12,8 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.counting;
+
 
 public class DataFinder {
 
@@ -25,17 +27,17 @@ public class DataFinder {
                 ).collect(toSingleton());
     }
 
-    public Map<String, Item> findSignatures(Judgment list, List<String> searched) {
+    public List<Item> findSignatures(Judgment list, List<String> searched) {
         return list.getItems()
                 .parallelStream()
                 .filter(item ->
                         item.getCourtCases()
                                 .parallelStream()
                                 .allMatch(courtCase -> searched.contains(courtCase.getCaseNumber()))
-                ).collect(Collectors.toMap(CourtCase::getCaseNumber, Function.identity()));
+                ).collect(Collectors.toList());
     }
 
-    public TreeMap<String, Aggregate> numberOfCases(Judgment list, String searched) {
+/*    public TreeMap<String, Aggregate> numberOfCases(Judgment list, String searched) {
         return list.getItems()
                 .parallelStream()
                 .filter(item ->
@@ -48,24 +50,15 @@ public class DataFinder {
                         (a, b) -> new Aggregate(b.name, a.count + 1),
                         TreeMap::new)
                 );
-    }
+    }*/
 
     // Change to sortedTreeMap
 
-    public TreeMap<String, Aggregate> bestJudges(Judgment list) {
-        return list.getItems()
+/*    public void bestJudges(List<Item> items) {
+        Map<String, Integer> testing = items
                 .parallelStream()
-                .filter(item ->
-                        item.getJudges()
-                                .parallelStream()
-                                .collect(Collectors.toMap(
-                                        Judge::getName,
-                                        judge -> new Aggregate(judge.getName(), 1),
-                                        (a, b) -> new Aggregate(b.name, a.count + 1),
-                                        TreeMap::new)
-                                ));
-                )
-    }
+                .
+    }*/
 
     public List<Item> findJudges(Judgment list, String searched) {
         return list.getItems()
@@ -91,9 +84,4 @@ public class DataFinder {
         );
     }
 
-    public static class Aggregate {
-
-        public String name;
-        public int count;
-    }
 }

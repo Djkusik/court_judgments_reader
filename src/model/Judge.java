@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Judge {
 
@@ -66,5 +67,18 @@ public class Judge {
 
     public List<String> getSpecialRoles() {
         return specialRoles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Judge judge = (Judge) o;
+        return Objects.equals(name, judge.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, function, specialRoles);
     }
 }
