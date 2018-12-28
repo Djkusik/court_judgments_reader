@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.indvd00m.ascii.render:ascii-render:1.4.0" type="repository">
+    <properties maven-id="com.indvd00m.ascii.render:ascii-render:1.4.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/indvd00m/ascii/render/ascii-render/1.4.0/ascii-render-1.4.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/indvd00m/ascii/render/ascii-render-api/1.4.0/ascii-render-api-1.4.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

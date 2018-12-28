@@ -11,9 +11,10 @@ public class JudgesStatistics {
     private Map<Judge, Integer> numberOfJudgeCases;
     private Map<Integer, Integer> numberofJudgesForJudgment;
 
-    public JudgesStatistics() {
+    public JudgesStatistics(Judgment judgment) {
         this.numberOfJudgeCases = new HashMap<>();
         this.numberofJudgesForJudgment = new HashMap<>();
+        this.makeStats(judgment);
     }
 
     public void makeStats(Judgment judgment) {

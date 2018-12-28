@@ -13,10 +13,11 @@ public class JudgmentStatistics {
     private Map<String, Integer> numberOfCasesInCourts;
     private Map<ReferencedRegulation, Integer> numberOfReferencedRegulations;
 
-    public JudgmentStatistics() {
+    public JudgmentStatistics(Judgment judgment) {
         this.numberOfCasesInMonth = new HashMap<>();
-        this.numberOfCasesInMonth = new HashMap<>();
+        this.numberOfCasesInCourts = new HashMap<>();
         this.numberOfReferencedRegulations = new HashMap<>();
+        this.makeStats(judgment);
     }
 
     public void makeStats(Judgment judgment) {
