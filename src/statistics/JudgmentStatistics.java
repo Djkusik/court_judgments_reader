@@ -10,11 +10,19 @@ import java.util.Map;
 public class JudgmentStatistics {
 
     private Map<String, Integer> numberOfCasesInMonth;
+    private Map<String, Integer> numberOfCasesInCourts;
     private Map<ReferencedRegulation, Integer> numberOfReferencedRegulations;
 
     public JudgmentStatistics() {
         this.numberOfCasesInMonth = new HashMap<>();
+        this.numberOfCasesInMonth = new HashMap<>();
         this.numberOfReferencedRegulations = new HashMap<>();
+    }
+
+    public void makeStats(Judgment judgment) {
+        this.makeStatsOfCasesInCourts(judgment);
+        this.makeStatsOfCasesInMonth(judgment);
+        this.makeStatsOfReferencedRegulations(judgment);
     }
 
     public void makeStatsOfCasesInMonth(Judgment judgments) {
@@ -22,6 +30,14 @@ public class JudgmentStatistics {
                 .forEach(item -> {
                     String month = item.getJudgmentDate().substring(5, 7);
                     numberOfCasesInMonth.merge(month, 1, (a, b) -> a + b);
+                });
+    }
+
+
+    public void makeStatsOfCasesInCourts(Judgment judgments) {
+        judgments.getItems()
+                .forEach(item -> {
+                    numberOfCasesInCourts.merge(item.getCourtType(), 1, (a, b) -> a + b);
                 });
     }
 
@@ -51,4 +67,7 @@ public class JudgmentStatistics {
         return numberOfReferencedRegulations;
     }
 
+    public Map<String, Integer> getNumberOfCasesInCourts() {
+        return numberOfCasesInCourts;
+    }
 }

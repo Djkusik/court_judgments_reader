@@ -16,6 +16,11 @@ public class JudgesStatistics {
         this.numberofJudgesForJudgment = new HashMap<>();
     }
 
+    public void makeStats(Judgment judgment) {
+        this.makeStatsOfCases(judgment);
+        this.makeStatsOfJudges(judgment);
+    }
+
     public void makeStatsOfCases(Judgment judgments) {
         judgments.getItems()
                 .stream()
