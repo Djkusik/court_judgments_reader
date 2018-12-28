@@ -1,4 +1,4 @@
-package nameItProperlyLater;
+package finder;
 
 import model.Item;
 import model.Judge;

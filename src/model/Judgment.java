@@ -29,7 +29,7 @@ public class Judgment {
         this.items = items;
     }
 
-    public void add(Judgment addedJson) {
-        items.addAll(addedJson.getItems());
+    public void add(Judgment addedItem) {
+        items.addAll(addedItem.getItems());
     }
 }
