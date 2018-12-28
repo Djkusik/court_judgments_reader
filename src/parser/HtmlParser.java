@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class HtmlParser {
 
-    private Map<String, String> judgmentTypes = ImmutableMap.of("postanowienie", "DECISION","uchwała","RESOLUTION","wyrok","SENTENCE","zarządzenie","REGULATION","uzasadnienie","REASONS");
+    private Map<String, String> judgmentTypes = ImmutableMap.of("postanowienie", "DECISION", "uchwała", "RESOLUTION", "wyrok", "SENTENCE", "zarządzenie", "REGULATION", "uzasadnienie", "REASONS");
     private Map<String, String> specialRoles = ImmutableMap.of("przewodniczący", "PRESIDING_JUDGE", "sprawozdawca", "REPORTING_JUDGE", "autor", "REASONS_FOR_JUDGMENT_AUTHOR");
     private Map<String, String> courtTypes = ImmutableMap.of("sąd najwyższy", "SUPREME_COURT", "trybunał konstytucyjny", "CONSTITUTIONAL_TRIBUNAL", "krajowa izba odwoławcza", "NATIONAL_APPEAL_CHAMBER");
 
@@ -67,15 +67,6 @@ public class HtmlParser {
         return judgmentType;
     }
 
-    public void getSomething(Document html) {
-        Element table = html.select("table").get(3);
-        Elements rows = table.getElementsByClass("lista-label");
-        System.out.println(table.getElementsByClass("lista-label").get(6).text());
-        //String genil = table.getElementsByClass("info-list-value").get(0);
-        System.out.println(table.getElementsByClass("info-list-value-uzasadnienie").get(1).text());
-        //System.out.println(genil[0].replaceAll("[^\\p{L}\\p{Z}]",""));
-    }
-
     public List<Judge> getHtmlJudges(Document html) {
         Element table = html.select("table").get(3);
         Elements rows = table.getElementsByClass("lista-label");
@@ -85,22 +76,21 @@ public class HtmlParser {
         for (Element currentRow : rows) {
             if (currentRow.text().equals("Sędziowie")) {
                 judges = table.getElementsByClass("info-list-value").get(i).html().split("<br>");
-            }
-            else
+            } else
                 i++;
 
         }
+        List<Judge> newList = new ArrayList<>();
 
         if (judges == null)
-            return null;
+            return newList;
 
-        List<Judge> newList = new ArrayList<>();
         for (String currentJudge : judges) {
             List<String> transformedRoles = new ArrayList<>();
             String roles = StringUtils.substringBetween(currentJudge, "/");
 
             String[] splitForName = currentJudge.split("/");
-            String name = splitForName[0].trim().replaceAll("[^\\p{L}\\p{Z}]","");
+            String name = splitForName[0].trim().replaceAll("[^\\p{L}\\p{Z}]", "");
             if (roles != null) {
                 String[] splitRoles = roles.split(" ");
                 for (String currentRole : splitRoles) {
@@ -129,54 +119,46 @@ public class HtmlParser {
             if (currentRow.text().equals("Data orzeczenia")) {
                 String[] dateSplit = table.getElementsByClass("info-list-value").get(i).text().split(" ");
                 return dateSplit[0].trim();
-            }
-            else
+            } else
                 i++;
         }
-        return null;
+        return "";
     }
 
     public List<ReferencedRegulation> getHtmlReferencedRegulations(Document html) {
         Element table = html.select("table").get(3);
-        Elements rows = table.getElementsByClass("lista-label");
-        Element regulations = null;
-        int i = 0;
-
-        for (Element currentRow : rows) {
-            if (currentRow.text().equals("Powołane przepisy")) {
-                regulations = table.getElementsByClass("info-list-value").get(i);
-            }
-            else
-                i++;
-        }
-
-        if (regulations == null)
-            return null;
+        Element row = table.getElementsByClass("info-list-value").last();
+        Elements regulations = row.select("[href]");
 
         List<ReferencedRegulation> newList = new ArrayList<>();
 
-        String title = regulations.getElementsByClass("nakt").text();
-        String numbers = regulations.getElementsByTag("a").text();
-        String art = StringUtils.substringBetween(regulations.text(),"</a>","<br>");
-        String yearString = StringUtils.substringBetween(regulations.text(), "U.", "nr").replaceAll("[^0-9]", "").trim();
-        String noString = StringUtils.substringBetween(regulations.text(),"nr","poz").replaceAll("[^0-9]", "").trim();
-        String entryString = StringUtils.substringBetween(regulations.html(),"poz","</a>").replaceAll("[^0-9]", "").trim();
-        int year = Integer.parseInt(yearString);
-        int no = Integer.parseInt(noString);
-        int entry = Integer.parseInt(entryString);
+        if (regulations == null)
+            return newList;
 
-        if (art == null)
-            art = "";
+        for (Element regulation : regulations) {
+            String title = regulation.parents().select("[class=nakt]").text();
+            String numbers = regulation.childNode(0).toString();
+            String art = StringUtils.substringBetween(regulation.parents().html(), "</a>", "<br>");
+            String yearString = StringUtils.substringBetween(regulation.text(), "U.", "nr").replaceAll("[^0-9]", "").trim();
+            String noString = StringUtils.substringBetween(regulation.text(), "nr", "poz").replaceAll("[^0-9]", "").trim();
+            String[] split = numbers.split(" ");
+            String entryString = split[split.length - 1];
+            int year = Integer.parseInt(yearString);
+            int no = Integer.parseInt(noString);
+            int entry = Integer.parseInt(entryString);
 
-        ReferencedRegulation newRegulations = ReferencedRegulation.Builder.newInstance()
-                .setJournalTitle(title)
-                .setJournalYear(year)
-                .setJournalNo(no)
-                .setJournalEntry(entry)
-                .setText(title + "(" + numbers + art + ")")
-                .build();
-        newList.add(newRegulations);
+            if (art == null)
+                art = "";
 
+            ReferencedRegulation newRegulations = ReferencedRegulation.Builder.newInstance()
+                    .setJournalTitle(title)
+                    .setJournalYear(year)
+                    .setJournalNo(no)
+                    .setJournalEntry(entry)
+                    .setText(title + "(" + numbers + art + ")")
+                    .build();
+            newList.add(newRegulations);
+        }
         return newList;
     }
 
@@ -189,8 +171,7 @@ public class HtmlParser {
         for (Element currentRow : rows) {
             if (currentRow.text().equals("Sąd")) {
                 court = table.getElementsByClass("info-list-value").get(i).text();
-            }
-            else
+            } else
                 i++;
         }
 
@@ -211,16 +192,16 @@ public class HtmlParser {
         for (Element currentRow : rows) {
             if (currentRow.text().equals("Sygn. powiązane")) {
                 courtCases = table.getElementsByClass("info-list-value").get(i).html().split("<br>");
-            }
-            else
+            } else
                 i++;
 
         }
 
-        if (courtCases == null)
-            return null;
-
         List<ReferencedCourtCase> newList = new ArrayList<>();
+
+        if (courtCases == null)
+            return newList;
+
         for (String currentCase : courtCases) {
             String[] splitted = currentCase.split("-");
             List<Integer> emptyList = new ArrayList<>();
