@@ -89,9 +89,7 @@ public class Collector {
         PrintStream old = System.out;
         System.setOut(ps);
 
-        for (int i = 1; i <= 12; ++i) {
-            System.out.println(Months[i - 1] + ": " + stats.getNumberOfCasesInMonth().get(i));
-        }
+        System.out.println(stats.getNumberOfCasesInMonth());
 
         System.out.flush();
         System.setOut(old);

@@ -31,6 +31,7 @@ public class Shell {
                 .terminal(terminal)
                 .completer(completors)
                 .build();
+        System.out.println("Aby poznać komendy, wpisz help");
         while (true) {
             String input = lineReader.readLine("Twoja komenda: ");
             try {
